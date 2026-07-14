@@ -1,0 +1,1 @@
+ALTER TABLE "products" ADD CONSTRAINT "veg_vegan_check" CHECK (NOT "is_vegan" OR "is_veg");
