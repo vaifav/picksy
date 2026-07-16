@@ -7,7 +7,7 @@ import {
 	index,
 	primaryKey,
 	check,
-	decimal,
+	integer,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { id, timestamps } from "@/drizzle/schema/others/baseFields";
@@ -33,6 +33,31 @@ export const products = pgTable(
 	(table) => [check("veg_vegan_check", sql`NOT ${table.isVegan} OR ${table.isVeg}`)],
 );
 
+export const variants = pgTable('variants', {
+  id,
+  productId: uuid('product_id')
+    .notNull()
+    .references(() => products.id, { onDelete: 'cascade' }),
+  sku: varchar('sku').unique().notNull(),
+  stock: integer('stock').notNull(),
+  size: varchar('size').default('100g').notNull(),
+  priceCents: integer('price_cents').notNull(),
+  comparePriceCents: integer('compare_price_cents').notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  ...timestamps
+});
+
+export const productImages = pgTable('product_images', {
+  id,
+  productId: uuid('product_id')
+    .notNull()
+    .references(() => products.id, { onDelete: 'cascade' }),
+  url: text('url').notNull(),
+  altText: varchar('alt_text', { length: 255 }).default('product image'), // Nullable by default if .notNull() is omitted
+  sortOrder: integer('sort_order').default(0).notNull(),
+  ...timestamps
+});
+
 export const tags = pgTable("tags", {
 	id,
 	slug: varchar("slug").unique().notNull(),
@@ -51,7 +76,7 @@ export const modifiers = pgTable("modifiers", {
 	id,
 	slug: varchar("slug").unique().notNull(),
 	name: varchar("name").unique().notNull(),
-	addedPrice: decimal("added_price", { scale: 10, precision: 2 }).notNull(),
+	addedPrice: integer("added_price").notNull(),
 	...timestamps,
 });
 

@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS pg_jsonschema;
+
 CREATE TYPE "order_status_enum" AS ENUM (
 	'pending',
 	'shipped',
