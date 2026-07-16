@@ -55,11 +55,5 @@ export const relations = defineRelations(schema, (relation) => {
 				to: relation.paymentMethods.id,
 			}),
 		},
-
-		
 	};
 });
-// profiles: {
-		// 	users: relation.one.users({ from: relation.profiles.userId, to: relation.users.id }),
-		// },
-		// users: { profiles: relation.one.profiles() },
